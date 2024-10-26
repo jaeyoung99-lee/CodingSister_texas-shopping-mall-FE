@@ -103,7 +103,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     // 재고 수량 변환하기
     const newStock = [...stock];
     newStock[index][1] = value;
-    setStock[newStock];
+    setStock(newStock);
   };
 
   const onHandleCategory = (event) => {
