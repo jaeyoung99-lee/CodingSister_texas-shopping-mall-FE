@@ -61,6 +61,10 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const handleClose = () => {
     // 모든걸 초기화시키고;
     // 다이얼로그 닫아주기
+    setShowDialog(false); // 모달 닫기
+    setFormData({ ...InitialFormData }); // 폼 데이터 초기화
+    setStock([]); // 재고 초기화
+    setStockError(false); // 재고 에러 초기화
   };
 
   const handleSubmit = (event) => {
@@ -199,7 +203,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           </Button>
           <div className="mt-2">
             {stock.map((item, index) => (
-              <Row key={index}>
+              <Row key={`${index}${item[0]}`}>
                 <Col sm={4}>
                   <Form.Select
                     onChange={(event) =>
