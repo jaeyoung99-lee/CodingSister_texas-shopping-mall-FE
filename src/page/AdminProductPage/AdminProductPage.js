@@ -69,6 +69,7 @@ const AdminProductPage = () => {
 
   const handlePageClick = ({ selected }) => {
     // 쿼리에 페이지값 바꿔주기
+    setSearchQuery({ ...searchQuery, page: selected + 1 });
   };
 
   /*
@@ -102,7 +103,7 @@ const AdminProductPage = () => {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={100}
+          pageCount={totalPageNum} // 전체 페이지
           forcePage={searchQuery.page - 1}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
