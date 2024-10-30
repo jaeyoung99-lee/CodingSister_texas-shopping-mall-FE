@@ -49,7 +49,7 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
               </tr>
             ))
           ) : (
-            <tr>No Data to show</tr>
+            <tr>No Data to show "결과 없음"</tr>
           )}
         </tbody>
       </Table>
