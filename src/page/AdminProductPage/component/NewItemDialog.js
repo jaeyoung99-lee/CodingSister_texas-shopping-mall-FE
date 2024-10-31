@@ -69,6 +69,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // 이미지가 업로드 되었는지 확인
+    if (!formData.image) {
+      alert("이미지를 업로드해주세요."); // 사용자에게 알림
+      return;
+    }
+
     // 재고를 입력했는지 확인, 아니면 에러
     if (stock.length === 0) {
       return setStockError(true);
@@ -80,7 +87,9 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     }, {});
     if (mode === "new") {
       // 새 상품 만들기
-      dispatch(createProduct({ ...formData, stock: totalStock }));
+      dispatch(createProduct({ ...formData, stock: totalStock })).then(() => {
+        setShowDialog(false);
+      });
     } else {
       // 상품 수정하기
     }

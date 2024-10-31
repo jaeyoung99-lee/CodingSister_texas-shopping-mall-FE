@@ -7,7 +7,9 @@ export const getProductList = createAsyncThunk(
   "products/getProductList",
   async (query, { rejectWithValue }) => {
     try {
-      const response = await api.get("/product", { params: { ...query } });
+      const response = await api.get("/product", {
+        params: { ...query, sort: "createdAt", order: "desc" },
+      });
       if (response.status !== 200) {
         throw new Error(response.error);
       }
