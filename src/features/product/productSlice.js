@@ -45,12 +45,39 @@ export const createProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
-  async (id, { dispatch, rejectWithValue }) => {}
+  async (id, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/product/${id}`);
+      if (response.status !== 200) {
+        throw new Error(response.error);
+      }
+      dispatch(
+        showToastMessage({ message: "상품 삭제 완료", status: "success" })
+      );
+      dispatch(getProductList({ page: 1 }));
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 export const editProduct = createAsyncThunk(
   "products/editProduct",
-  async ({ id, ...formData }, { dispatch, rejectWithValue }) => {}
+  async ({ id, ...formData }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.put(`/product/${id}`, formData);
+      if (response.status !== 200) {
+        throw new Error(response.error);
+      }
+      dispatch(
+        showToastMessage({ message: "상품 수정 완료", status: "success" })
+      );
+      dispatch(getProductList({ page: 1 }));
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 // 슬라이스 생성
@@ -103,6 +130,19 @@ const productSlice = createSlice({
       .addCase(getProductList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(editProduct.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = "";
+        state.success = true;
+      })
+      .addCase(editProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });

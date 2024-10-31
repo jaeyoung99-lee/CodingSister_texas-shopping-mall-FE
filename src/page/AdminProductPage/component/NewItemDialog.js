@@ -92,6 +92,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       });
     } else {
       // 상품 수정하기
+      dispatch(
+        editProduct({ ...formData, stock: totalStock, id: selectedProduct._id })
+      ).then(() => {
+        setShowDialog(false);
+      });
     }
   };
 
@@ -103,7 +108,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const addStock = () => {
     // 재고타입 추가시 배열에 새 배열 추가
-    setStock([...stock, []]);
+    setStock([...stock, ["", 0]]);
   };
 
   const deleteStock = (idx) => {
@@ -122,7 +127,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const handleStockChange = (value, index) => {
     // 재고 수량 변환하기
     const newStock = [...stock];
-    newStock[index][1] = value;
+    newStock[index][1] = parseInt(value);
     setStock(newStock);
   };
 
