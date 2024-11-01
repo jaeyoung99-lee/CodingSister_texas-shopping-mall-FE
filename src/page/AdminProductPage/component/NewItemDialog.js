@@ -87,16 +87,26 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     }, {});
     if (mode === "new") {
       // 새 상품 만들기
-      dispatch(createProduct({ ...formData, stock: totalStock })).then(() => {
-        setShowDialog(false);
-      });
+      dispatch(createProduct({ ...formData, stock: totalStock }))
+        .unwrap()
+        .then(() => {
+          setShowDialog(false);
+        })
+        .catch((err) => {
+          alert("sku가 이미 존재합니다.");
+        });
     } else {
       // 상품 수정하기
       dispatch(
         editProduct({ ...formData, stock: totalStock, id: selectedProduct._id })
-      ).then(() => {
-        setShowDialog(false);
-      });
+      )
+        .unwrap()
+        .then(() => {
+          setShowDialog(false);
+        })
+        .catch((err) => {
+          alert(err.error);
+        });
     }
   };
 
