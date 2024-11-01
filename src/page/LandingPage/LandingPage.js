@@ -1,28 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Spinner } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductList } from "../../features/product/productSlice";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
-
   const productList = useSelector((state) => state.product.productList);
   const [query] = useSearchParams();
   const name = query.get("name");
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    dispatch(
-      getProductList({
-        name,
-      })
-    );
+    const fetchData = async () => {
+      await dispatch(
+        getProductList({
+          name,
+        })
+      );
+      setLoading(false);
+    };
+
+    fetchData();
   }, [query]);
 
   return (
     <Container>
       <Row>
-        {productList.length > 0 ? (
+        {loading ? (
+          <div className="text-align-center">
+            <Spinner animation="border" />
+          </div>
+        ) : productList.length > 0 ? (
           productList.map((item) => (
             <Col md={3} sm={12} key={item._id}>
               <ProductCard item={item} />
