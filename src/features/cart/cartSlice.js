@@ -77,7 +77,21 @@ export const deleteCartItem = createAsyncThunk(
 
 export const updateQty = createAsyncThunk(
   "cart/updateQty",
-  async ({ id, value }, { rejectWithValue }) => {}
+  async ({ id, value }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await api.put(`/cart/${id}`, { qty: value });
+      if (response.status !== 200) {
+        throw new Error(response.error);
+      }
+      dispatch(
+        showToastMessage({ message: "상품 개수 수정 완료", status: "success" })
+      );
+      dispatch(getCartList());
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 export const getCartQty = createAsyncThunk(
@@ -121,6 +135,22 @@ const cartSlice = createSlice({
         );
       })
       .addCase(getCartList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateQty.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updateQty.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = "";
+        state.cartList = action.payload;
+        state.totalPrice = action.payload.reduce(
+          (total, item) => total + item.productId.price * item.qty,
+          0
+        );
+      })
+      .addCase(updateQty.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
