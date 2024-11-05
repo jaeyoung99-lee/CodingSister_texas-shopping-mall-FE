@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
+import { initialCart } from "../../features/cart/cartSlice";
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const Navbar = ({ user }) => {
     }
   };
   const handleLogout = () => {
+    dispatch(initialCart());
     dispatch(logout());
     navigate("/");
   };
