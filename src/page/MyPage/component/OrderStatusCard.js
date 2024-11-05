@@ -7,14 +7,14 @@ const OrderStatusCard = ({ orderItem }) => {
   return (
     <div>
       <Row className="status-card">
-        <Col xs={2}>
+        <Col xs={3}>
           <img
             src={orderItem.items[0]?.productId?.image}
             alt={orderItem.items[0]?.productId?.image}
             height={96}
           />
         </Col>
-        <Col xs={8} className="order-info">
+        <Col xs={7} className="order-info">
           <div>
             <strong>주문번호: {orderItem.orderNum}</strong>
           </div>
