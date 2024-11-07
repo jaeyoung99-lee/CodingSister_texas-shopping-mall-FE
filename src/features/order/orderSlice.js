@@ -48,12 +48,42 @@ export const getOrder = createAsyncThunk(
 
 export const getOrderList = createAsyncThunk(
   "order/getOrderList",
-  async (query, { rejectWithValue, dispatch }) => {}
+  async (query, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await api.get("/order", { params: { ...query } });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
 );
 
 export const updateOrder = createAsyncThunk(
   "order/updateOrder",
-  async ({ id, status }, { dispatch, rejectWithValue }) => {}
+  async ({ id, status, page, orderNum }, { dispatch, rejectWithValue }) => {
+    try {
+      // controller에서 getOrderList (method:GET)를 불러와서 사용할 예정이라
+      // page와 orderNum을 params로 보낸다
+      const response = await api.put(
+        `/order/${id}?page=${page}&orderNum=${orderNum}`,
+        {
+          id,
+          status,
+        }
+      );
+      dispatch(
+        showToastMessage({
+          message: `The order has been changed to ${status}`,
+          status: "success",
+        })
+      );
+      return response.data;
+    } catch (error) {
+      dispatch(showToastMessage({ message: error.message, status: "error" }));
+      rejectWithValue(error.message);
+    }
+  }
 );
 
 // Order slice
@@ -89,6 +119,34 @@ const orderSlice = createSlice({
         state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getOrderList.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getOrderList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderList = action.payload.data;
+        state.totalPageNum = action.payload.totalPageNum;
+        state.error = "";
+      })
+      .addCase(getOrderList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateOrder.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderList = state.orderList.map((order) =>
+          order._id === action.payload._id ? action.payload : order
+        );
+        state.totalPageNum = action.payload.totalPageNum;
+        state.error = "";
+      })
+      .addCase(updateOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

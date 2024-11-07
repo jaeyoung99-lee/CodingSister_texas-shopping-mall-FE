@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Table, Badge } from "react-bootstrap";
 import { badgeBg } from "../../../constants/order.constants";
 import { currencyFormat } from "../../../utils/number";
 
 const OrderTable = ({ header, data, openEditForm }) => {
+  useEffect(() => {
+    // 데이터가 변경되었을 때 자동으로 반영될 수 있도록
+    // 상태가 변경되면 리렌더링을 보장
+  }, [data]);
+
   return (
     <div className="overflow-x">
       <Table striped bordered hover>

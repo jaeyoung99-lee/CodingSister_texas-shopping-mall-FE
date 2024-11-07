@@ -1,19 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Modal, Button, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { ORDER_STATUS } from "../../../constants/order.constants";
 import { currencyFormat } from "../../../utils/number";
-import { updateOrder } from "../../../features/order/orderSlice";
+import { getOrderList, updateOrder } from "../../../features/order/orderSlice";
 
 const OrderDetailDialog = ({ open, handleClose }) => {
   const selectedOrder = useSelector((state) => state.order.selectedOrder);
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
   const dispatch = useDispatch();
+  const orderList = useSelector((state) => state.order.orderList);
+
+  useEffect(() => {
+    // 데이터가 변경되었을 때 리렌더링 보장
+  }, [orderList]);
+
+  useEffect(() => {
+    // 상태가 변경되면 데이터를 다시 요청
+    dispatch(getOrderList());
+  }, [orderStatus]); // 상태가 변경될 때마다 데이터 재조회
+
+  useEffect(() => {
+    if (selectedOrder && selectedOrder.status) {
+      setOrderStatus(selectedOrder.status);
+    }
+  }, [selectedOrder]);
 
   const handleStatusChange = (event) => {
     setOrderStatus(event.target.value);
   };
-  const submitStatus = () => {
+  const submitStatus = (e) => {
+    e.preventDefault();
     dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
     handleClose();
   };
