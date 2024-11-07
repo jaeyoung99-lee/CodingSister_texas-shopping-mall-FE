@@ -48,7 +48,7 @@ const OrderDetailDialog = ({ open, handleClose }) => {
         <p>주문날짜: {selectedOrder.createdAt.slice(0, 10)}</p>
         <p>이메일: {selectedOrder.userId.email}</p>
         <p>
-          주소:{selectedOrder.shipTo.address + " " + selectedOrder.shipTo.city}
+          주소: {selectedOrder.shipTo.address + " " + selectedOrder.shipTo.city}
         </p>
         <p>
           연락처:
