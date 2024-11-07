@@ -78,6 +78,7 @@ export const updateOrder = createAsyncThunk(
           status: "success",
         })
       );
+      dispatch(getOrderList());
       return response.data;
     } catch (error) {
       dispatch(showToastMessage({ message: error.message, status: "error" }));
