@@ -48,8 +48,38 @@ body {
     skyBlue,
     deepSkyBlue
   ); /* 그라데이션 색상 */
-  height: 100vh; /* 화면 전체 높이를 사용 */
-  margin: 0; /* 기본 margin 제거 */
-  background-size: cover; /* 배경을 화면 크기에 맞게 조정 */
+  height: 100vh;
+  margin: 0;
+  background-size: cover;
   background-attachment: fixed; /* 배경이 스크롤 시 따라가지 않게 고정 */
+}
+
+.weather-search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.weather-warning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.weather-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.weather-info p {
+  font-size: 18px;
+  margin: 0;
+  color: orange;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8),
+    1px -1px 2px rgba(0, 0, 0, 0.8), -1px 1px 2px rgba(0, 0, 0, 0.8);
 }
